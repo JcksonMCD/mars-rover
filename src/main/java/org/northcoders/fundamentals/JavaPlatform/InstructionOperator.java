@@ -2,6 +2,8 @@ package org.northcoders.fundamentals.JavaPlatform;
 
 import input.layer.Instructor;
 
+import java.util.List;
+
 public class InstructionOperator {
     Plateau plateau;
     int vehicleNumber;
@@ -23,7 +25,7 @@ public class InstructionOperator {
     }
 
 
-    public void executeInstructions(Instructor[] instructions){
+    public void executeInstructions(List<Instructor> instructions){
         for(Instructor instruction : instructions){
             switch (instruction){
                 case Instructor.M: plateau.moveVehicle(vehicleNumber);

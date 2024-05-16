@@ -27,7 +27,7 @@ public class InputParser {
     }
 
     // Takes a string input of instructions and parses to a list of Instructor's
-    public Instructor[] instructorParser(String input){
+    public List<Instructor> instructorParser(String input){
         char[] separatedInput = input.toUpperCase().toCharArray();
         List<Instructor> instructionsTranslated = new ArrayList<>();
 
@@ -35,6 +35,6 @@ public class InputParser {
              instructionsTranslated.add(Instructor.valueOf(String.valueOf(instruction)));
          }
 
-         return (Instructor[]) instructionsTranslated.toArray();
+         return instructionsTranslated;
     }
 }

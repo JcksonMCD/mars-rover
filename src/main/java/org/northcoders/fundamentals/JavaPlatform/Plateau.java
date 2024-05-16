@@ -44,13 +44,13 @@ public class Plateau {
     public void moveVehicle(int vehicleNumber){
         Vehicle currentVehicle = vehicles.get(vehicleNumber);
         switch (currentVehicle.position.getFacing()){
-            case N :    if ((currentVehicle.position.getY() + 1) < plateauSize.getMAX_Y()){
+            case N :    if ((currentVehicle.position.getY() + 1) <= plateauSize.getMAX_Y()){
                         currentVehicle.position.setY(currentVehicle.position.getY() + 1);
                         } else {
                             throw new IllegalArgumentException(currentVehicle.getClass() + " will not move out of bounds! Do you want a crash!!");
                         }
                 break;
-            case E:     if ((currentVehicle.position.getX() + 1) < plateauSize.getMAX_X()){
+            case E:     if ((currentVehicle.position.getX() + 1) <= plateauSize.getMAX_X()){
                             currentVehicle.position.setX(currentVehicle.position.getX() + 1);
                         } else {
                             throw new IllegalArgumentException(currentVehicle.getClass() + " will not move out of bounds! Do you want a crash!!");
@@ -70,4 +70,14 @@ public class Plateau {
                 break;
         }
     }
+    public void printPositionOfVehicle(int vehicleListNumber){
+        System.out.println(getVehicles().get(vehicleListNumber).position.getX() + " " + getVehicles().get(vehicleListNumber).position.getY() + " "
+                + getVehicles().get(vehicleListNumber).position.getFacing());
+    }
+
+    public String positionOfVehicleString(int vehicleListNumber){
+        return getVehicles().get(vehicleListNumber).position.getX() + " " + getVehicles().get(vehicleListNumber).position.getY() + " "
+                + getVehicles().get(vehicleListNumber).position.getFacing();
+    }
+
 }

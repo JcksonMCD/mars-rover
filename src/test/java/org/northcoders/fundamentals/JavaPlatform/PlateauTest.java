@@ -1,9 +1,8 @@
-package environment;
+package org.northcoders.fundamentals.JavaPlatform;
 
 import input.layer.PlateauSize;
 import input.layer.Position;
 import org.junit.jupiter.api.Test;
-import org.northcoders.fundamentals.JavaPlatform.Plateau;
 import vehicle.AvailableVehicles;
 import vehicle.Rover;
 
