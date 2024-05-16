@@ -1,5 +1,6 @@
 package environment;
 
+import input.layer.Instructor;
 import input.layer.PlateauSize;
 import input.layer.Position;
 import vehicle.AvailableVehicles;
