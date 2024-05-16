@@ -21,10 +21,12 @@ public class Plateau {
     public void addVehicle(Position startPosition, AvailableVehicles vehicleType){
         if ((0 <= startPosition.getX() && startPosition.getX() <= plateauSize.getMAX_X()) && 0
                 <= startPosition.getY() && startPosition.getY()<= startPosition.getX()){
+
             switch(vehicleType){
+
                 case ROVER: Vehicle vehicle = new Rover(startPosition);
-                    this.vehicles.add(vehicle);
-                    break;
+                            this.vehicles.add(vehicle);
+                        break;
             }
             System.out.println(vehicleType + " has successfully landed to position (" + startPosition.getX() + ", " + startPosition.getY() + ") on the plateau.");
         } else {

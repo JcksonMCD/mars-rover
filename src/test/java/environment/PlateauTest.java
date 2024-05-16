@@ -33,6 +33,5 @@ class PlateauTest {
         assertThrows(IllegalArgumentException.class, () -> plateau.addVehicle(new Position(-1 , 0, N), vehicleType));
         assertThrows(IllegalArgumentException.class, () -> plateau.addVehicle(new Position(7 , 7, N), vehicleType));
 
-
     }
 }
