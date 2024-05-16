@@ -1,6 +1,7 @@
-package org.northcoders.fundamentals.JavaPlatform;
+package input.layer;
 
 public class PlateauSize {
+    private static PlateauSize instance;
     private final int MAX_X;
     private final int MAX_Y;
 

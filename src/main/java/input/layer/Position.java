@@ -1,4 +1,4 @@
-package org.northcoders.fundamentals.JavaPlatform;
+package input.layer;
 
 public class Position {
         private int x;

@@ -1,4 +1,4 @@
-package org.northcoders.fundamentals.JavaPlatform;
+package input.layer;
 
 public enum CompassDirection {
     N,
