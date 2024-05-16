@@ -1,9 +1,27 @@
-import environment.Plateau;
+package org.northcoders.fundamentals.JavaPlatform;
+
 import input.layer.Instructor;
 
 public class InstructionOperator {
     Plateau plateau;
     int vehicleNumber;
+
+    public Plateau getPlateau() {
+        return plateau;
+    }
+
+    public int getVehicleNumber() {
+        return vehicleNumber;
+    }
+
+    public void setPlateau(Plateau plateau) {
+        this.plateau = plateau;
+    }
+
+    public void setVehicleNumber(int vehicleNumber) {
+        this.vehicleNumber = vehicleNumber;
+    }
+
 
     public void executeInstructions(Instructor[] instructions){
         for(Instructor instruction : instructions){

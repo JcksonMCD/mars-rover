@@ -1,6 +1,5 @@
-package environment;
+package org.northcoders.fundamentals.JavaPlatform;
 
-import input.layer.Instructor;
 import input.layer.PlateauSize;
 import input.layer.Position;
 import vehicle.AvailableVehicles;
@@ -20,14 +19,17 @@ public class Plateau {
 
 
     public void addVehicle(Position startPosition, AvailableVehicles vehicleType){
-        if ((0 <= startPosition.getX() && startPosition.getX() <= plateauSize.getMAX_X()) && 0
-                <= startPosition.getY() && startPosition.getY()<= startPosition.getX()){
+        if (((0 <= startPosition.getX()) && (startPosition.getX() <= plateauSize.getMAX_X())) &&
+                (0 <= startPosition.getY()) && (startPosition.getY() <= plateauSize.getMAX_Y())){
 
-            switch(vehicleType){
-
-                case ROVER: Vehicle vehicle = new Rover(startPosition);
-                            this.vehicles.add(vehicle);
-                        break;
+            Vehicle vehicle;
+            switch(vehicleType) {
+                case ROVER:
+                    vehicle = new Rover(startPosition);
+                    this.vehicles.add(vehicle);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unknown vehicle type: " + vehicleType);
             }
             System.out.println(vehicleType + " has successfully landed to position (" + startPosition.getX() + ", " + startPosition.getY() + ") on the plateau.");
         } else {

@@ -1,12 +1,11 @@
 package environment;
 
-import input.layer.CompassDirection;
 import input.layer.PlateauSize;
 import input.layer.Position;
 import org.junit.jupiter.api.Test;
+import org.northcoders.fundamentals.JavaPlatform.Plateau;
 import vehicle.AvailableVehicles;
 import vehicle.Rover;
-import vehicle.Vehicle;
 
 import static input.layer.CompassDirection.*;
 import static org.junit.jupiter.api.Assertions.*;
