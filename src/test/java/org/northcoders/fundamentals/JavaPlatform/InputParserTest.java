@@ -21,4 +21,13 @@ class InputParserTest {
     }
 
 
+    @Test
+    void positionParser() {
+        InputParser inputParser = new InputParser();
+        Position position = new Position(5, 5, CompassDirection.N);
+        assertEquals(CompassDirection.N, inputParser.positionParser("5 5 N").getFacing());
+        assertEquals(5, inputParser.positionParser("5 5 N").getY());
+        assertEquals(5, inputParser.positionParser("5 5 N").getX());
+
+    }
 }
