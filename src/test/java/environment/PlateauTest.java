@@ -1,5 +1,6 @@
 package environment;
 
+import input.layer.CompassDirection;
 import input.layer.PlateauSize;
 import input.layer.Position;
 import org.junit.jupiter.api.Test;
@@ -7,7 +8,7 @@ import vehicle.AvailableVehicles;
 import vehicle.Rover;
 import vehicle.Vehicle;
 
-import static input.layer.CompassDirection.N;
+import static input.layer.CompassDirection.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PlateauTest {
@@ -33,5 +34,21 @@ class PlateauTest {
         assertThrows(IllegalArgumentException.class, () -> plateau.addVehicle(new Position(-1 , 0, N), vehicleType));
         assertThrows(IllegalArgumentException.class, () -> plateau.addVehicle(new Position(7 , 7, N), vehicleType));
 
+    }
+
+    @Test
+    void moveVehicle() {
+        Plateau plateau = new Plateau(new PlateauSize(5, 5));
+        plateau.addVehicle(new Position(0 ,0, N), AvailableVehicles.ROVER);
+        plateau.addVehicle(new Position(1 ,0, W), AvailableVehicles.ROVER);
+        plateau.addVehicle(new Position(0 ,0, S), AvailableVehicles.ROVER);
+        plateau.addVehicle(new Position(5 ,0, E), AvailableVehicles.ROVER);
+        plateau.moveVehicle(0);
+        plateau.moveVehicle(1);
+
+        assertEquals(plateau.getVehicles().getFirst().position.getY(), 1);
+        assertEquals(plateau.getVehicles().getFirst().position.getX(), 0);
+        assertThrows(IllegalArgumentException.class, () -> plateau.moveVehicle(2));
+        assertThrows(IllegalArgumentException.class, () -> plateau.moveVehicle(3));
     }
 }

@@ -9,20 +9,7 @@ public class Vehicle {
         this.position = position;
     }
 
-    Position position;
-
-    public void move(){
-        switch (position.getFacing()){
-            case N :position.setY(position.getY() + 1);
-                break;
-            case E: position.setX(position.getX() + 1);
-                break;
-            case S: position.setY(position.getY() - 1);
-                break;
-            case W: position.setX(position.getX() -1);
-                break;
-        }
-    }
+    public Position position;
 
     public void rotateLeft(){
         switch (position.getFacing()){
