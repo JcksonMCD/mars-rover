@@ -69,22 +69,23 @@ public class InstructionOperator {
         return plateauSize;
     }
 
-    public void getVehicleTypeFromUser(){
+    public AvailableVehicles getVehicleTypeFromUser(){
         Scanner scanner = new Scanner(System.in);
-        InputParser inputParser = new InputParser();
         boolean validVehicleInputted = false;
+        AvailableVehicles vehicleType = null;
 
         do {
             try{
                 System.out.println("Which vehicle is landing (" + Arrays.toString(AvailableVehicles.values()) + ")");
-                AvailableVehicles.valueOf(scanner.nextLine());
+                vehicleType = AvailableVehicles.valueOf(scanner.nextLine());
                 validVehicleInputted = true;
             } catch (IllegalArgumentException e){
                 System.out.println("You can only use available formats. Please pick a valid option.");
             }
         } while (!validVehicleInputted);
-
+        
         scanner.close();
+        return vehicleType;
     }
 
     public void getStartingVehicleSpotFromUser(){
@@ -102,6 +103,31 @@ public class InstructionOperator {
                 System.out.println("I said format X Y Facing(N/E/S/W)! Use it!");
             }
         } while (!validstarterSpotInputted);
+
+        scanner.close();
+    }
+
+    public void getInstructionsFromUser() {
+        Scanner scanner = new Scanner(System.in);
+        InputParser inputParser = new InputParser();
+        boolean validInstructionsInputted = false;
+
+        do {
+            try {
+                System.out.println("Please input your vehicle move instructions (M: Move vehicle 1 block in the direction it is facing, " +
+                        "L: Move 90 degrees to the left" +
+                        ", R: Move 90 degrees to the right). Options can be chained e.g (MMRMMLLM).");
+                String input = scanner.nextLine().trim();
+                if (!input.isEmpty()) {
+                    inputParser.instructorParser(input);
+                    validInstructionsInputted = true;
+                } else {
+                    System.out.println("Empty input. Please provide valid instructions.");
+                }
+            } catch (IllegalArgumentException e) {
+                System.out.println("Invalid input please follow instructions");
+            }
+        } while (!validInstructionsInputted);
 
         scanner.close();
     }

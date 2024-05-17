@@ -134,4 +134,36 @@ class InstructionOperatorTest {
         assertEquals(3, position.getY());
         assertEquals(N, position.getFacing());
     }
+
+    @Test
+    public void testGetVehicleTypeFromUser_ValidInput() {
+        String input = "ROVER\n";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
+        AvailableVehicles result = instructionOperator.getVehicleTypeFromUser();
+
+        assertEquals(AvailableVehicles.ROVER, result);
+    }
+
+    @Test
+    public void testGetVehicleTypeFromUser_InvalidThenValidInput() {
+        String input = "INVALID\nROVER\n";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
+        AvailableVehicles result = instructionOperator.getVehicleTypeFromUser();
+
+        assertEquals(AvailableVehicles.ROVER, result);
+    }
+
+    @Test
+    public void testGetInstructionsFromUser_ValidInput() {
+        String input = "MMRMMLLM\n";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
+        instructionOperator.getInstructionsFromUser();
+    }
+    
 }

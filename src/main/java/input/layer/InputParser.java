@@ -33,14 +33,25 @@ public class InputParser {
     }
 
     // Takes a string input of instructions and parses to a list of Instructor's
-    public List<Instructor> instructorParser(String input){
-        char[] separatedInput = input.toUpperCase().toCharArray();
+    public List<Instructor> instructorParser(String input) {
         List<Instructor> instructionsTranslated = new ArrayList<>();
 
-         for (char instruction : separatedInput){
-             instructionsTranslated.add(Instructor.valueOf(String.valueOf(instruction)));
-         }
+        for (char instruction : input.toUpperCase().toCharArray()) {
+            switch (instruction) {
+                case 'M':
+                    instructionsTranslated.add(Instructor.M);
+                    break;
+                case 'L':
+                    instructionsTranslated.add(Instructor.L);
+                    break;
+                case 'R':
+                    instructionsTranslated.add(Instructor.R);
+                    break;
+                default:
+                    throw new IllegalArgumentException("M, L, R are the only available options");
+            }
+        }
 
-         return instructionsTranslated;
+        return instructionsTranslated;
     }
 }
