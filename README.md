@@ -1,4 +1,4 @@
-## **Mars Rover**
+## Mars Rover
 # Description
 The Mars Rover Program is a simple Java application that simulates the movement of rovers on the surface of Mars.
 
