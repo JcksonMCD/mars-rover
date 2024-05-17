@@ -10,18 +10,17 @@ public class IntegrationTest {
     @Test
     void integrationTest(){
         InputParser inputParser = new InputParser();
-        InstructionOperator instructionOperator = new InstructionOperator();
-        instructionOperator.plateau = new Plateau(inputParser.plateauSizeParser("5 5"));
-        instructionOperator.plateau.addVehicle(inputParser.positionParser("1 2 N"), AvailableVehicles.ROVER);
-        instructionOperator.vehicleNumber = 0;
-        instructionOperator.executeInstructions(inputParser.instructorParser("LMLMLMLMM"));
+        InstructionOperator.plateau = new Plateau(inputParser.plateauSizeParser("5 5"));
+        InstructionOperator.plateau.addVehicle(inputParser.positionParser("1 2 N"), AvailableVehicles.ROVER);
+        InstructionOperator.vehicleNumber = 0;
+        InstructionOperator.executeInstructions(inputParser.instructorParser("LMLMLMLMM"));
 
-        Assertions.assertEquals("1 3 N", instructionOperator.plateau.positionOfVehicleString(instructionOperator.vehicleNumber));
+        Assertions.assertEquals("1 3 N", InstructionOperator.plateau.positionOfVehicleString(InstructionOperator.vehicleNumber));
 
-        instructionOperator.plateau.addVehicle(inputParser.positionParser("3 3 E"), AvailableVehicles.ROVER);
-        instructionOperator.vehicleNumber = 1;
-        instructionOperator.executeInstructions(inputParser.instructorParser("MMRMMRMRRM"));
+        InstructionOperator.plateau.addVehicle(inputParser.positionParser("3 3 E"), AvailableVehicles.ROVER);
+        InstructionOperator.vehicleNumber = 1;
+        InstructionOperator.executeInstructions(inputParser.instructorParser("MMRMMRMRRM"));
 
-        Assertions.assertEquals("5 1 E", instructionOperator.plateau.positionOfVehicleString(instructionOperator.vehicleNumber));
+        Assertions.assertEquals("5 1 E", InstructionOperator.plateau.positionOfVehicleString(InstructionOperator.vehicleNumber));
     }
 }

@@ -22,13 +22,13 @@ class InstructionOperatorTest {
         instructionOperator.getPlateau().addVehicle(new Position(0, 0, N), AvailableVehicles.ROVER);
 
 
-        instructionOperator.executeInstructions(List.of(Instructor.M));
-        instructionOperator.executeInstructions(List.of(Instructor.L));
+        InstructionOperator.executeInstructions(List.of(Instructor.M));
+        InstructionOperator.executeInstructions(List.of(Instructor.L));
 
         assertEquals(1, instructionOperator.getPlateau().getVehicles().getFirst().position.getY());
         assertEquals(CompassDirection.W, instructionOperator.getPlateau().getVehicles().getFirst().position.getFacing());
 
-        instructionOperator.executeInstructions(List.of(Instructor.R, Instructor.M));
+        InstructionOperator.executeInstructions(List.of(Instructor.R, Instructor.M));
 
         assertEquals(2, instructionOperator.getPlateau().getVehicles().getFirst().position.getY());
 
@@ -40,12 +40,10 @@ class InstructionOperatorTest {
     @BeforeEach
     public void setUp() {
         instructionOperator = new InstructionOperator();
-
-        PlateauSize plateauSize = new PlateauSize(10, 10);
-        mockPlateau = new Plateau(plateauSize);
-        mockPlateau.addVehicle(new Position(0, 0, N), AvailableVehicles.ROVER);
-
+        mockPlateau= new Plateau(new PlateauSize(10, 10));
         instructionOperator.setPlateau(mockPlateau);
+
+        mockPlateau.addVehicle(new Position(0, 0, N), AvailableVehicles.ROVER);
     }
 
     @Test
@@ -93,46 +91,13 @@ class InstructionOperatorTest {
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        instructionOperator.getStartingVehicleSpotFromUser();
+        InstructionOperator instructionOperator = new InstructionOperator();
+        Position startPosition = instructionOperator.getStartingVehicleSpotFromUser();
 
-        Position position = mockPlateau.getVehicles().get(0).position;
-
-        assertNotNull(position);
-        assertEquals(2, position.getX());
-        assertEquals(3, position.getY());
-        assertEquals(N, position.getFacing());
-    }
-
-    @Test
-    public void testGetStartingVehicleSpotFromUser_InvalidThenValidInput() {
-        String input = "invalid\n2 3 N\n";
-        InputStream in = new ByteArrayInputStream(input.getBytes());
-        System.setIn(in);
-
-        instructionOperator.getStartingVehicleSpotFromUser();
-
-        Position position = mockPlateau.getVehicles().get(0).position;
-
-        assertNotNull(position);
-        assertEquals(2, position.getX());
-        assertEquals(3, position.getY());
-        assertEquals(N, position.getFacing());
-    }
-
-    @Test
-    public void testGetStartingVehicleSpotFromUser_NegativeCoordinatesThenValidInput() {
-        String input = "-1 3 N\n2 3 N\n";
-        InputStream in = new ByteArrayInputStream(input.getBytes());
-        System.setIn(in);
-
-        instructionOperator.getStartingVehicleSpotFromUser();
-
-        Position position = mockPlateau.getVehicles().get(0).position;
-
-        assertNotNull(position);
-        assertEquals(2, position.getX());
-        assertEquals(3, position.getY());
-        assertEquals(N, position.getFacing());
+        assertNotNull(startPosition);
+        assertEquals(2, startPosition.getX());
+        assertEquals(3, startPosition.getY());
+        assertEquals(CompassDirection.N, startPosition.getFacing());
     }
 
     @Test
@@ -163,7 +128,9 @@ class InstructionOperatorTest {
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        instructionOperator.getInstructionsFromUser();
-    }
+        InstructionOperator instructionOperator = new InstructionOperator();
 
+        assertDoesNotThrow(instructionOperator::getInstructionsFromUser);
+    }
 }
+

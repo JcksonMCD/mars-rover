@@ -3,15 +3,18 @@ package org.northcoders.fundamentals.JavaPlatform;
 import input.layer.PlateauSize;
 import input.layer.Position;
 import vehicle.AvailableVehicles;
+import vehicle.MoonBuggy;
 import vehicle.Rover;
 import vehicle.Vehicle;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Plateau {
-    PlateauSize plateauSize;
+    public PlateauSize plateauSize;
     List<Vehicle> vehicles = new ArrayList<>();
+    List<CrashSite> crashSites = new ArrayList<>();
 
     public Plateau(PlateauSize plateauSize) {
         this.plateauSize = plateauSize;
@@ -27,6 +30,13 @@ public class Plateau {
                         vehicle = new Rover(startPosition);
                         this.vehicles.add(vehicle);
                         break;
+                    case MOON_BUGGY:
+                        vehicle = new MoonBuggy(startPosition);
+                        this.vehicles.add(vehicle);
+                        break;
+                    case FORD_FIESTA:
+                        System.out.println("Ford Fiestas cant land on Mars! You crashed... oops :(");
+                        break;
                     default:
                         throw new IllegalArgumentException("Unknown vehicle type: " + vehicleType);
                 }
@@ -40,35 +50,30 @@ public class Plateau {
         return vehicles;
     }
 
-    public void moveVehicle(int vehicleNumber){
+    public void moveVehicle(int vehicleNumber) {
         Vehicle currentVehicle = vehicles.get(vehicleNumber);
-        switch (currentVehicle.position.getFacing()){
-            case N :    if ((currentVehicle.position.getY() + 1) <= plateauSize.getMAX_Y()){
-                        currentVehicle.position.setY(currentVehicle.position.getY() + 1);
-                        } else {
-                            throw new IllegalArgumentException(currentVehicle.getClass() + " will not move out of bounds! Do you want a crash!!");
-                        }
+        switch (currentVehicle.position.getFacing()) {
+            case N:
+                currentVehicle.position.setY(currentVehicle.position.getY() + 1);
                 break;
-            case E:     if ((currentVehicle.position.getX() + 1) <= plateauSize.getMAX_X()){
-                            currentVehicle.position.setX(currentVehicle.position.getX() + 1);
-                        } else {
-                            throw new IllegalArgumentException(currentVehicle.getClass() + " will not move out of bounds! Do you want a crash!!");
-                        }
+            case E:
+                currentVehicle.position.setX(currentVehicle.position.getX() + 1);
                 break;
-            case S:     if ((currentVehicle.position.getY() - 1) >= 0){
-                        currentVehicle.position.setY(currentVehicle.position.getY() - 1);
-                        } else {
-                        throw new IllegalArgumentException(currentVehicle.getClass() + " will not move out of bounds! Do you want a crash!!");
-                        }
+            case S:
+                currentVehicle.position.setY(currentVehicle.position.getY() - 1);
                 break;
-            case W:     if ((currentVehicle.position.getX() - 1) >= 0){
-                        currentVehicle.position.setX(currentVehicle.position.getX() - 1);
-                        } else {
-                        throw new IllegalArgumentException(currentVehicle.getClass() + " will not move out of bounds! Do you want a crash!!");
-                        }
+            case W:
+                currentVehicle.position.setX(currentVehicle.position.getX() - 1);
                 break;
         }
+
+        // Check if the new position is out of bounds
+        if (currentVehicle.position.getX() < 0 || currentVehicle.position.getX() > plateauSize.getMAX_X() ||
+                currentVehicle.position.getY() < 0 || currentVehicle.position.getY() > plateauSize.getMAX_Y()) {
+            throw new IllegalArgumentException(currentVehicle.getClass().getSimpleName() + " will move out of bounds! Do you want a crash!!");
+        }
     }
+
     public void printPositionOfVehicles(){
         for (int i = 0; i < vehicles.size(); i++){
             System.out.println("Position of " + getVehicles().get(i).getClass().getSimpleName() + " is " + getVehicles().get(i).position.getX() + " " + getVehicles().get(i).position.getY() + " "
