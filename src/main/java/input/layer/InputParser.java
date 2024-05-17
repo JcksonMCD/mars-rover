@@ -19,9 +19,15 @@ public class InputParser {
     //     Takes an input string of starting location and converts to Position class fields
     public Position positionParser(String input){
         String[] separatedInput = input.split(" ");
-        int x = Integer.parseInt(separatedInput[0]);
-        int y = Integer.parseInt(separatedInput[1]);
+        int x;
+        int y;
 
+        if ((Integer.parseInt(separatedInput[0]) >=0) && (Integer.parseInt(separatedInput[1]) >= 0)){
+           x = Integer.parseInt(separatedInput[0]);
+           y = Integer.parseInt(separatedInput[1]);
+        } else {
+            throw new IllegalArgumentException("Negative numbers not allowed!");
+        }
 
         return new Position(x, y, CompassDirection.valueOf(separatedInput[2].toUpperCase()));
     }
