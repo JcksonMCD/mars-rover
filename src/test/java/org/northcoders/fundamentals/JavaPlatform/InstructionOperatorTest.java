@@ -165,5 +165,5 @@ class InstructionOperatorTest {
 
         instructionOperator.getInstructionsFromUser();
     }
-    
+
 }

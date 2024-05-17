@@ -22,14 +22,18 @@ public class InputParser {
         int x;
         int y;
 
-        if ((Integer.parseInt(separatedInput[0]) >=0) && (Integer.parseInt(separatedInput[1]) >= 0)){
-           x = Integer.parseInt(separatedInput[0]);
-           y = Integer.parseInt(separatedInput[1]);
-        } else {
-            throw new IllegalArgumentException("Negative numbers not allowed!");
-        }
+        try {
+            if ((Integer.parseInt(separatedInput[0]) >= 0) && (Integer.parseInt(separatedInput[1]) >= 0)) {
+                x = Integer.parseInt(separatedInput[0]);
+                y = Integer.parseInt(separatedInput[1]);
+            } else {
+                throw new IllegalArgumentException("Negative numbers not allowed!");
+            }
 
-        return new Position(x, y, CompassDirection.valueOf(separatedInput[2].toUpperCase()));
+            return new Position(x, y, CompassDirection.valueOf(separatedInput[2].toUpperCase()));
+        } catch (IllegalArgumentException e){
+            throw new IllegalArgumentException("Please use the input format provided. Current input invalid");
+        }
     }
 
     // Takes a string input of instructions and parses to a list of Instructor's

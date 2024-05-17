@@ -3,6 +3,7 @@ package org.northcoders.fundamentals.JavaPlatform;
 import input.layer.InputParser;
 import input.layer.Instructor;
 import input.layer.PlateauSize;
+import input.layer.Position;
 import vehicle.AvailableVehicles;
 
 import java.util.Arrays;
@@ -10,15 +11,11 @@ import java.util.List;
 import java.util.Scanner;
 
 public class InstructionOperator {
-    Plateau plateau;
-    int vehicleNumber;
+    static Plateau plateau;
+    static int vehicleNumber = 0;
 
-    public static void main(String[] args) {
-        InstructionOperator instructionOperator = new InstructionOperator();
-        instructionOperator.getPlateauSizeFromUser();
-    }
 
-    public void executeInstructions(List<Instructor> instructions){
+    public static void executeInstructions(List<Instructor> instructions){
         for(Instructor instruction : instructions){
             switch (instruction){
                 case Instructor.M: plateau.moveVehicle(vehicleNumber);
@@ -29,15 +26,16 @@ public class InstructionOperator {
                     break;
             }
         }
+        plateau.printPositionOfVehicles();
     }
 
     public void setPlateau(Plateau plateau) {
-        this.plateau = plateau;
-        vehicleNumber = plateau.vehicles.size() - 1;
+        InstructionOperator.plateau = plateau;
+        vehicleNumber = plateau.vehicles.size();
     }
 
     public void setVehicleNumber(int vehicleNumber) {
-        this.vehicleNumber = vehicleNumber;
+        InstructionOperator.vehicleNumber = vehicleNumber;
     }
 
     public Plateau getPlateau() {
@@ -62,10 +60,11 @@ public class InstructionOperator {
                 System.out.println("Plateau size set :)");
             } catch (IllegalArgumentException e){
                 System.out.println("Not a valid size, use the given format silly!");
+            }  catch (ArrayIndexOutOfBoundsException e){
+                System.out.println("Both pieces of information need to be provided. Please provide X and Y");
             }
         } while (!validPlateauSizeInputted);
 
-        scanner.close();
         return plateauSize;
     }
 
@@ -83,34 +82,41 @@ public class InstructionOperator {
                 System.out.println("You can only use available formats. Please pick a valid option.");
             }
         } while (!validVehicleInputted);
-        
-        scanner.close();
+
         return vehicleType;
     }
 
-    public void getStartingVehicleSpotFromUser(){
+    public Position getStartingVehicleSpotFromUser(){
         Scanner scanner = new Scanner(System.in);
         InputParser inputParser = new InputParser();
         boolean validstarterSpotInputted = false;
-        PlateauSize plateauSize = new PlateauSize(0 , 0);
+        Position startPosition = null;
 
-        do {
+            do {
             try{
                 System.out.println("Please input where you want your vehicle to start (X Y Facing(N/ E/ S/ W)");
-                plateau.vehicles.getFirst().position = inputParser.positionParser(scanner.nextLine());
-                validstarterSpotInputted = true;
+                startPosition = inputParser.positionParser(scanner.nextLine());
+                if (((0 <= startPosition.getX()) && (startPosition.getX() <= plateau.plateauSize.getMAX_X())) &&
+                        (0 <= startPosition.getY()) && (startPosition.getY() <= plateau.plateauSize.getMAX_Y())){
+                    validstarterSpotInputted = true;
+                } else {
+                    throw new IllegalArgumentException("Start position off grid. Pick new coordinates with in the plateau size");
+                }
             } catch (IllegalArgumentException e){
-                System.out.println("I said format X Y Facing(N/E/S/W)! Use it!");
+                System.out.println(e.getMessage());
+            } catch (ArrayIndexOutOfBoundsException e){
+                System.out.println("All three pieces of information need to be provided. Please provide X, Y and direction information.");
             }
         } while (!validstarterSpotInputted);
-
-        scanner.close();
+        
+        return startPosition;
     }
 
     public void getInstructionsFromUser() {
         Scanner scanner = new Scanner(System.in);
         InputParser inputParser = new InputParser();
         boolean validInstructionsInputted = false;
+        List<Instructor> instructorList = null;
 
         do {
             try {
@@ -119,7 +125,8 @@ public class InstructionOperator {
                         ", R: Move 90 degrees to the right). Options can be chained e.g (MMRMMLLM).");
                 String input = scanner.nextLine().trim();
                 if (!input.isEmpty()) {
-                    inputParser.instructorParser(input);
+                    instructorList = inputParser.instructorParser(input);
+                    executeInstructions(instructorList);
                     validInstructionsInputted = true;
                 } else {
                     System.out.println("Empty input. Please provide valid instructions.");
@@ -129,6 +136,5 @@ public class InstructionOperator {
             }
         } while (!validInstructionsInputted);
 
-        scanner.close();
     }
 }

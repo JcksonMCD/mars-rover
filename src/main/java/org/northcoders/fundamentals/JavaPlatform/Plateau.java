@@ -19,22 +19,21 @@ public class Plateau {
 
 
     public void addVehicle(Position startPosition, AvailableVehicles vehicleType){
-        if (((0 <= startPosition.getX()) && (startPosition.getX() <= plateauSize.getMAX_X())) &&
-                (0 <= startPosition.getY()) && (startPosition.getY() <= plateauSize.getMAX_Y())){
-
-            Vehicle vehicle;
-            switch(vehicleType) {
-                case ROVER:
-                    vehicle = new Rover(startPosition);
-                    this.vehicles.add(vehicle);
-                    break;
-                default:
-                    throw new IllegalArgumentException("Unknown vehicle type: " + vehicleType);
+            if (((0 <= startPosition.getX()) && (startPosition.getX() <= plateauSize.getMAX_X())) &&
+                    (0 <= startPosition.getY()) && (startPosition.getY() <= plateauSize.getMAX_Y())) {
+                Vehicle vehicle;
+                switch (vehicleType) {
+                    case ROVER:
+                        vehicle = new Rover(startPosition);
+                        this.vehicles.add(vehicle);
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Unknown vehicle type: " + vehicleType);
+                }
+                System.out.println(vehicleType + " has successfully landed to position (" + startPosition.getX() + ", " + startPosition.getY() + ") on the plateau.");
+            } else {
+                throw new IllegalArgumentException("Rover out of bounds for plateau size.");
             }
-            System.out.println(vehicleType + " has successfully landed to position (" + startPosition.getX() + ", " + startPosition.getY() + ") on the plateau.");
-        } else {
-            throw new IllegalArgumentException("Rover out of bounds for plateau size.");
-        }
     }
 
     public List<Vehicle> getVehicles() {
@@ -70,9 +69,11 @@ public class Plateau {
                 break;
         }
     }
-    public void printPositionOfVehicle(int vehicleListNumber){
-        System.out.println(getVehicles().get(vehicleListNumber).position.getX() + " " + getVehicles().get(vehicleListNumber).position.getY() + " "
-                + getVehicles().get(vehicleListNumber).position.getFacing());
+    public void printPositionOfVehicles(){
+        for (int i = 0; i < vehicles.size(); i++){
+            System.out.println("Position of " + getVehicles().get(i).getClass().getSimpleName() + " is " + getVehicles().get(i).position.getX() + " " + getVehicles().get(i).position.getY() + " "
+                    + getVehicles().get(i).position.getFacing() + ".");
+        }
     }
 
     public String positionOfVehicleString(int vehicleListNumber){
