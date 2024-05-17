@@ -23,6 +23,5 @@ public class IntegrationTest {
         instructionOperator.executeInstructions(inputParser.instructorParser("MMRMMRMRRM"));
 
         Assertions.assertEquals("5 1 E", instructionOperator.plateau.positionOfVehicleString(instructionOperator.vehicleNumber));
-        
     }
 }

@@ -12,7 +12,7 @@ public class InputParser {
         if ((Integer.parseInt(separatedInput[0]) > 0) && (Integer.parseInt(separatedInput[1]) > 0)) {
             return new PlateauSize(Integer.parseInt(separatedInput[0]), Integer.parseInt(separatedInput[1]));
         } else {
-            throw new RuntimeException("Plateau size inputs need to be more than zero.");
+            throw new IllegalArgumentException("Plateau size inputs need to be more than zero.");
         }
     }
 
