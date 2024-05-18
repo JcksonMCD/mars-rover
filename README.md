@@ -1,13 +1,13 @@
-## **Mars Rover**
-# Description
+# Mars Rover
+## Description
 The Mars Rover Program is a simple Java application that simulates the movement of rovers on the surface of Mars.
 
-# Features
+## Features
 - Allows users to define the size of the plateau.
 - Enables users to deploy rovers with specific starting positions and orientations.
 - Accepts movement instructions for each rover and displays their final positions.
 
-# Usage
+## Usage
 - Clone the repository to your local machine.
 - Navigate to the project directory.
 - Compile the Java files using your preferred Java compiler or IDE.
