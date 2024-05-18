@@ -1,4 +1,4 @@
-package org.northcoders.fundamentals.JavaPlatform;
+package plateau.models;
 
 public class CrashSite {
     int x;

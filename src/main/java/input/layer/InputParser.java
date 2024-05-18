@@ -1,13 +1,16 @@
 package input.layer;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class InputParser {
     // Takes input String and parses to PlateauSize
-    public PlateauSize plateauSizeParser(String input){
+    public PlateauSize plateauSizeParser(String input) {
         String[] separatedInput = input.split(" ");
+
+        if (separatedInput.length != 2) {
+            throw new ArrayIndexOutOfBoundsException("Both X and Y must be provided.");
+        }
 
         if ((Integer.parseInt(separatedInput[0]) > 0) && (Integer.parseInt(separatedInput[1]) > 0)) {
             return new PlateauSize(Integer.parseInt(separatedInput[0]), Integer.parseInt(separatedInput[1]));
@@ -16,22 +19,26 @@ public class InputParser {
         }
     }
 
-    //     Takes an input string of starting location and converts to Position class fields
-    public Position positionParser(String input){
+    // Takes an input string of starting location and converts to Position class fields
+    public Position positionParser(String input) {
         String[] separatedInput = input.split(" ");
         int x;
         int y;
 
+        if (separatedInput.length != 3) {
+            throw new ArrayIndexOutOfBoundsException("X, Y, and direction must be provided.");
+        }
+
         try {
-            if ((Integer.parseInt(separatedInput[0]) >= 0) && (Integer.parseInt(separatedInput[1]) >= 0)) {
-                x = Integer.parseInt(separatedInput[0]);
-                y = Integer.parseInt(separatedInput[1]);
-            } else {
+            x = Integer.parseInt(separatedInput[0]);
+            y = Integer.parseInt(separatedInput[1]);
+
+            if (x < 0 || y < 0) {
                 throw new IllegalArgumentException("Negative numbers not allowed!");
             }
 
             return new Position(x, y, CompassDirection.valueOf(separatedInput[2].toUpperCase()));
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Please use the input format provided. Current input invalid");
         }
     }

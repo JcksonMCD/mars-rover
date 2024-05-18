@@ -3,134 +3,81 @@ package org.northcoders.fundamentals.JavaPlatform;
 import input.layer.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import plateau.models.Plateau;
 import vehicle.AvailableVehicles;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.List;
+import java.util.Scanner;
 
-import static input.layer.CompassDirection.N;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-class InstructionOperatorTest {
-
-    @Test
-    void executeInstructions() {
-        InstructionOperator instructionOperator = new InstructionOperator();
-        instructionOperator.setVehicleNumber(0);
-        instructionOperator.setPlateau(new Plateau(new PlateauSize(5 , 5)));
-        instructionOperator.getPlateau().addVehicle(new Position(0, 0, N), AvailableVehicles.ROVER);
-
-
-        InstructionOperator.executeInstructions(List.of(Instructor.M));
-        InstructionOperator.executeInstructions(List.of(Instructor.L));
-
-        assertEquals(1, instructionOperator.getPlateau().getVehicles().getFirst().position.getY());
-        assertEquals(CompassDirection.W, instructionOperator.getPlateau().getVehicles().getFirst().position.getFacing());
-
-        InstructionOperator.executeInstructions(List.of(Instructor.R, Instructor.M));
-
-        assertEquals(2, instructionOperator.getPlateau().getVehicles().getFirst().position.getY());
-
-    }
-
+@ExtendWith(MockitoExtension.class)
+public class InstructionOperatorTest {
     private InstructionOperator instructionOperator;
-    private Plateau mockPlateau;
+    private Plateau plateau;
+
+    @Mock
+    private Scanner mockScanner;
 
     @BeforeEach
     public void setUp() {
-        instructionOperator = new InstructionOperator();
-        mockPlateau= new Plateau(new PlateauSize(10, 10));
-        instructionOperator.setPlateau(mockPlateau);
-
-        mockPlateau.addVehicle(new Position(0, 0, N), AvailableVehicles.ROVER);
+        instructionOperator = new InstructionOperator(mockScanner);
+        plateau = new Plateau(new PlateauSize(5, 5));
+        instructionOperator.setPlateau(plateau);
+        plateau.addVehicle(new Position(0, 0, CompassDirection.N), AvailableVehicles.ROVER);
+        instructionOperator.setCurrentVehicle(0);
     }
 
     @Test
-    public void testGetPlateauSizeFromUser_ValidInput() {
-        String input = "5 10\n";
-        InputStream in = new ByteArrayInputStream(input.getBytes());
-        System.setIn(in);
+    public void testRunBasicProgrammeStartWithValidInputs() {
+        when(mockScanner.nextLine())
+                .thenReturn("5 5")  // for getPlateauSizeFromUser
+                .thenReturn("0 0 N")  // for getStartingVehicleSpotFromUser
+                .thenReturn("ROVER")  // for getVehicleTypeFromUser
+                .thenReturn("MMRMMLLM");  // for getInstructionsFromUser
 
-        PlateauSize plateauSize = instructionOperator.getPlateauSizeFromUser();
+        instructionOperator.runBasicProgrammeStart();
 
-        assertNotNull(plateauSize);
-        assertEquals(5, plateauSize.getMAX_X());
-        assertEquals(10, plateauSize.getMAX_Y());
+        assertNotNull(instructionOperator.getPlateau());
+        assertEquals(1, instructionOperator.getPlateau().getVehicles().size());
+        verify(mockScanner, times(4)).nextLine();
     }
 
     @Test
-    public void testGetPlateauSizeFromUser_InvalidThenValidInput() {
-        String input = "invalid\n5 10\n";
-        InputStream in = new ByteArrayInputStream(input.getBytes());
-        System.setIn(in);
+    public void testRunBasicProgrammeStartWithFordFiesta() {
+        when(mockScanner.nextLine())
+                .thenReturn("5 5")  // for getPlateauSizeFromUser
+                .thenReturn("0 0 N")  // for getStartingVehicleSpotFromUser
+                .thenReturn("FORD_FIESTA")  // for getVehicleTypeFromUser
+                .thenReturn("Y")  // for retry after Ford Fiesta crash
+                .thenReturn("0 0 N")  // for getStartingVehicleSpotFromUser
+                .thenReturn("ROVER")  // for getVehicleTypeFromUser
+                .thenReturn("MMRMMLLM");  // for getInstructionsFromUser
 
-        PlateauSize plateauSize = instructionOperator.getPlateauSizeFromUser();
+        instructionOperator.runBasicProgrammeStart();
 
-        assertNotNull(plateauSize);
-        assertEquals(5, plateauSize.getMAX_X());
-        assertEquals(10, plateauSize.getMAX_Y());
+        assertNotNull(instructionOperator.getPlateau());
+        assertEquals(1, instructionOperator.getPlateau().getVehicles().size());
+        verify(mockScanner, times(7)).nextLine();
     }
 
     @Test
-    public void testGetPlateauSizeFromUser_NegativeCoordinatesThenValidInput() {
-        String input = "-1 10\n5 10\n";
-        InputStream in = new ByteArrayInputStream(input.getBytes());
-        System.setIn(in);
-
-        PlateauSize plateauSize = instructionOperator.getPlateauSizeFromUser();
-
-        assertNotNull(plateauSize);
-        assertEquals(5, plateauSize.getMAX_X());
-        assertEquals(10, plateauSize.getMAX_Y());
+    public void testMovementInBoundsOfPlateau() {
+        assertTrue(instructionOperator.movementInBoundsOfPlateau());
     }
 
     @Test
-    public void testGetStartingVehicleSpotFromUser_ValidInput() {
-        String input = "2 3 N\n";
-        InputStream in = new ByteArrayInputStream(input.getBytes());
-        System.setIn(in);
+    public void testExecuteInstructions() {
+        List<Instructor> instructions = List.of(Instructor.M, Instructor.R, Instructor.M);
+        instructionOperator.executeInstructions(instructions);
 
-        InstructionOperator instructionOperator = new InstructionOperator();
-        Position startPosition = instructionOperator.getStartingVehicleSpotFromUser();
-
-        assertNotNull(startPosition);
-        assertEquals(2, startPosition.getX());
-        assertEquals(3, startPosition.getY());
-        assertEquals(CompassDirection.N, startPosition.getFacing());
-    }
-
-    @Test
-    public void testGetVehicleTypeFromUser_ValidInput() {
-        String input = "ROVER\n";
-        InputStream in = new ByteArrayInputStream(input.getBytes());
-        System.setIn(in);
-
-        AvailableVehicles result = instructionOperator.getVehicleTypeFromUser();
-
-        assertEquals(AvailableVehicles.ROVER, result);
-    }
-
-    @Test
-    public void testGetVehicleTypeFromUser_InvalidThenValidInput() {
-        String input = "INVALID\nROVER\n";
-        InputStream in = new ByteArrayInputStream(input.getBytes());
-        System.setIn(in);
-
-        AvailableVehicles result = instructionOperator.getVehicleTypeFromUser();
-
-        assertEquals(AvailableVehicles.ROVER, result);
-    }
-
-    @Test
-    public void testGetInstructionsFromUser_ValidInput() {
-        String input = "MMRMMLLM\n";
-        InputStream in = new ByteArrayInputStream(input.getBytes());
-        System.setIn(in);
-
-        InstructionOperator instructionOperator = new InstructionOperator();
-
-        assertDoesNotThrow(instructionOperator::getInstructionsFromUser);
+        Position currentPosition = instructionOperator.getPlateau().getVehicles().get(0).position;
+        assertEquals(1, currentPosition.getX());
+        assertEquals(1, currentPosition.getY());
+        assertEquals(CompassDirection.E, currentPosition.getFacing());
     }
 }
-

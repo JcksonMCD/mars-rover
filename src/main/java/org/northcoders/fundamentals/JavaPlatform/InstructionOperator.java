@@ -4,95 +4,140 @@ import input.layer.InputParser;
 import input.layer.Instructor;
 import input.layer.PlateauSize;
 import input.layer.Position;
+import plateau.models.Plateau;
 import vehicle.AvailableVehicles;
+import vehicle.Vehicle;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
 public class InstructionOperator {
-    static Plateau plateau;
-    static int vehicleNumber = 0;
+    private static Plateau plateau;
+    static Vehicle currentVehicle;
+    private static Scanner scanner;
+    public static boolean fordPicked = false;
 
-    public static void runBasicProgramme(){
-        InstructionOperator instructionOperator = new InstructionOperator();
-        Plateau plateau = new Plateau(instructionOperator.getPlateauSizeFromUser());
-        instructionOperator.setPlateau(plateau);
-        plateau.addVehicle(instructionOperator.getStartingVehicleSpotFromUser(), instructionOperator.getVehicleTypeFromUser());
-        instructionOperator.getInstructionsFromUser();
+    public InstructionOperator(Scanner scanner) {
+        this.scanner = scanner;
     }
 
-    public static void executeInstructions(List<Instructor> instructions){
-        for(Instructor instruction : instructions){
-            switch (instruction){
-                case M: plateau.moveVehicle(vehicleNumber);
+    public static void runBasicProgrammeStart() {
+        InstructionOperator instructionOperator = new InstructionOperator(new Scanner(System.in));
+        plateau = new Plateau(getPlateauSizeFromUser());
+        setPlateau(plateau);
+
+        while (true) {
+            Position startPos = getStartingVehicleSpotFromUser();
+            AvailableVehicles vehicleType = getVehicleTypeFromUser();
+
+            if (vehicleType == AvailableVehicles.FORD_FIESTA) {
+                System.out.println("Ford Fiestas can't land on Mars! You crashed... oops");
+                System.out.println("Would you like to try landing again? (Y/N)");
+                String choice = scanner.nextLine();
+                if (!choice.equalsIgnoreCase("Y")) {
+                    System.exit(0); // Exit the program if the user chooses not to retry
+                }
+                fordPicked = true;
+            } else {
+                fordPicked = false;
+            }
+
+            if (!fordPicked) {
+                plateau.addVehicle(startPos, vehicleType);
+                break;
+            }
+        }
+
+        setCurrentVehicle(0);
+        getInstructionsFromUser();
+    }
+
+    public static boolean movementInBoundsOfPlateau() {
+        Position originalPosition = new Position(currentVehicle.position.getX(), currentVehicle.position.getY(), currentVehicle.position.getFacing());
+        currentVehicle.move();
+
+        if (currentVehicle.position.getX() < 0 || currentVehicle.position.getX() > plateau.plateauSize.getMAX_X() ||
+                currentVehicle.position.getY() < 0 || currentVehicle.position.getY() > plateau.plateauSize.getMAX_Y()) {
+
+            currentVehicle.position.setX(originalPosition.getX());
+            currentVehicle.position.setY(originalPosition.getY());
+
+            throw new IllegalArgumentException(currentVehicle.getClass().getSimpleName() + " will move out of bounds! Do you want a crash!!");
+        } else {
+            currentVehicle.position.setX(originalPosition.getX());
+            currentVehicle.position.setY(originalPosition.getY());
+            return true;
+        }
+    }
+
+    public static void executeInstructions(List<Instructor> instructions) {
+        if (currentVehicle == null) {
+            throw new IllegalStateException("Current vehicle not set.");
+        }
+
+        for (Instructor instruction : instructions) {
+            switch (instruction) {
+                case M:
+                    if (movementInBoundsOfPlateau()) {
+                        currentVehicle.move();
+                    } else throw new IllegalArgumentException("Movement out of bounds! You can only move within the size of the plateau");
                     break;
-                case R: plateau.getVehicles().get(vehicleNumber).rotateRight();
+                case R:
+                    currentVehicle.rotateRight();
                     break;
-                case L: plateau.getVehicles().get(vehicleNumber).rotateLeft();
+                case L:
+                    currentVehicle.rotateLeft();
                     break;
             }
         }
         plateau.printPositionOfVehicles();
     }
 
-    public void setPlateau(Plateau plateau) {
+    public static void setPlateau(Plateau plateau) {
         InstructionOperator.plateau = plateau;
-        vehicleNumber = plateau.vehicles.size();
     }
 
-    public void setVehicleNumber(int vehicleNumber) {
-        InstructionOperator.vehicleNumber = vehicleNumber;
+    public static void setCurrentVehicle(int vehicleNumber) {
+        if (!plateau.getVehicles().isEmpty()) {
+            currentVehicle = plateau.getVehicles().get(vehicleNumber);
+        }
     }
 
-    public Plateau getPlateau() {
+    public static Plateau getPlateau() {
         return plateau;
     }
 
-    public PlateauSize getPlateauSizeFromUser(){
-        Scanner scanner = new Scanner(System.in);
+    public static PlateauSize getPlateauSizeFromUser() {
         InputParser inputParser = new InputParser();
         boolean validPlateauSizeInputted = false;
-        PlateauSize plateauSize = new PlateauSize(0 , 0);
+        PlateauSize plateauSize = new PlateauSize(0, 0);
 
         do {
-            try{
+            try {
                 System.out.println("Please input the size of your plateau space in the format (maxX maxY). Where X and Y are positive whole numbers.");
                 plateauSize = inputParser.plateauSizeParser(scanner.nextLine());
                 validPlateauSizeInputted = true;
                 System.out.println("Plateau size set :)");
-            } catch (IllegalArgumentException e){
-                System.out.println("Not a valid size silly. Read the instructions again.");
-            }  catch (ArrayIndexOutOfBoundsException e){
-                System.out.println("Both pieces of information need to be provided. Please provide X and Y");
+            } catch (IllegalArgumentException e) {
+                System.out.println("Not a valid size. Read the instructions again.");
+            } catch (ArrayIndexOutOfBoundsException e) {
+                System.out.println("Both pieces of information need to be provided. Please provide X and Y.");
             }
         } while (!validPlateauSizeInputted);
 
         return plateauSize;
     }
-    public AvailableVehicles getVehicleTypeFromUser() {
-        Scanner scanner = new Scanner(System.in);
+
+    public static AvailableVehicles getVehicleTypeFromUser() {
         boolean validVehicleInputted = false;
         AvailableVehicles vehicleType = null;
 
         while (!validVehicleInputted) {
             try {
                 System.out.println("Which vehicle do you want to use? Choose from the following options: " + Arrays.toString(AvailableVehicles.values()));
-                vehicleType = AvailableVehicles.valueOf(scanner.nextLine());
-                if (vehicleType == AvailableVehicles.FORD_FIESTA) {
-                    System.out.println("Ford Fiestas can't land on Mars! You crashed... oops");
-//                    CrashSite crashSite = new CrashSite();
-                    System.out.println("Would you like to try landing again? (Y/N)");
-                    String choice = scanner.nextLine();
-                    if (!choice.equalsIgnoreCase("Y")) {
-                        System.exit(0); // Exit the program if the user chooses not to retry
-                    } else {
-                        getStartingVehicleSpotFromUser();
-                    }
-                } else {
-                    validVehicleInputted = true;
-                }
+                vehicleType = AvailableVehicles.valueOf(scanner.nextLine().toUpperCase());
+                validVehicleInputted = true;
             } catch (IllegalArgumentException e) {
                 System.out.println("You can only use available formats. Please pick a valid option.");
             }
@@ -101,34 +146,32 @@ public class InstructionOperator {
         return vehicleType;
     }
 
-    public Position getStartingVehicleSpotFromUser(){
-        Scanner scanner = new Scanner(System.in);
+    public static Position getStartingVehicleSpotFromUser() {
         InputParser inputParser = new InputParser();
         boolean validstarterSpotInputted = false;
         Position startPosition = null;
 
-            do {
-            try{
-                System.out.println("Please input where you want your vehicle to start (X Y Facing(N/ E/ S/ W)");
+        do {
+            try {
+                System.out.println("Please input where you want your vehicle to start (X Y Facing(N/ E/ S/ W))");
                 startPosition = inputParser.positionParser(scanner.nextLine());
                 if (((0 <= startPosition.getX()) && (startPosition.getX() <= plateau.plateauSize.getMAX_X())) &&
-                        (0 <= startPosition.getY()) && (startPosition.getY() <= plateau.plateauSize.getMAX_Y())){
+                        (0 <= startPosition.getY()) && (startPosition.getY() <= plateau.plateauSize.getMAX_Y())) {
                     validstarterSpotInputted = true;
                 } else {
-                    throw new IllegalArgumentException("Start position off grid. Pick new coordinates with in the plateau size");
+                    throw new IllegalArgumentException("Start position off grid. Pick new coordinates within the plateau size.");
                 }
-            } catch (IllegalArgumentException e){
+            } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
-            } catch (ArrayIndexOutOfBoundsException e){
-                System.out.println("All three pieces of information need to be provided. Please provide X, Y and direction information.");
+            } catch (ArrayIndexOutOfBoundsException e) {
+                System.out.println("All three pieces of information need to be provided. Please provide X, Y, and direction information.");
             }
         } while (!validstarterSpotInputted);
-        
+
         return startPosition;
     }
 
-    public void getInstructionsFromUser() {
-        Scanner scanner = new Scanner(System.in);
+    public static void getInstructionsFromUser() {
         InputParser inputParser = new InputParser();
         boolean validInstructionsInputted = false;
 
@@ -148,6 +191,6 @@ public class InstructionOperator {
                 System.out.println(e.getMessage());
             }
         } while (!validInstructionsInputted);
-
     }
 }
+
