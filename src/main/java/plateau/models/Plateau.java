@@ -11,6 +11,7 @@ import vehicle.Vehicle;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class Plateau {
     public PlateauSize plateauSize;
     List<Vehicle> vehicles = new ArrayList<>();
@@ -22,6 +23,9 @@ public class Plateau {
     public List<Vehicle> getVehicles() {
         return vehicles;
     }
+    public void addCrashSite(CrashSite crashSite) {
+        this.crashSites.add(crashSite);
+    }
 
     public void printPositionOfVehicles(){
         for (Vehicle vehicle : vehicles) {
@@ -31,6 +35,11 @@ public class Plateau {
     }
 
     public void addVehicle(Position startPosition, AvailableVehicles vehicleType){
+//        for (CrashSite crashSite : crashSites){
+//            if (crashSite.x == startPosition.getX() && crashSite.y == startPosition.getY()){
+//                System.out.println("Look who crashed again... You've landed on a crash site :(");
+//            }
+//        }
         if (((0 <= startPosition.getX()) && (startPosition.getX() <= plateauSize.getMAX_X())) &&
                 (0 <= startPosition.getY()) && (startPosition.getY() <= plateauSize.getMAX_Y())) {
             Vehicle vehicle;

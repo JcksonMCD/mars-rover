@@ -4,6 +4,7 @@ import input.layer.InputParser;
 import input.layer.Instructor;
 import input.layer.PlateauSize;
 import input.layer.Position;
+import plateau.models.CrashSite;
 import plateau.models.Plateau;
 import vehicle.AvailableVehicles;
 import vehicle.Vehicle;
@@ -33,6 +34,7 @@ public class InstructionOperator {
 
             if (vehicleType == AvailableVehicles.FORD_FIESTA) {
                 System.out.println("Ford Fiestas can't land on Mars! You crashed... oops");
+                plateau.addCrashSite(new CrashSite(startPos.getX(), startPos.getY()));
                 System.out.println("Would you like to try landing again? (Y/N)");
                 String choice = scanner.nextLine();
                 if (!choice.equalsIgnoreCase("Y")) {
