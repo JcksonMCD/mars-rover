@@ -1,9 +1,13 @@
 package vehicle;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import inputlayer.CompassDirection;
+import inputlayer.Position;
+import logiclayer.vehicle.Vehicle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import input.layer.*;
+
 
 public class VehicleTest {
 

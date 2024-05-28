@@ -1,4 +1,4 @@
-package plateau.models;
+package logiclayer.plateaumodels;
 
 public class CrashSite {
     int x;

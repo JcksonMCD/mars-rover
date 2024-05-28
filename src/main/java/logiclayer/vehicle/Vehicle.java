@@ -1,7 +1,7 @@
-package vehicle;
+package logiclayer.vehicle;
 
-import input.layer.CompassDirection;
-import input.layer.Position;
+import inputlayer.CompassDirection;
+import inputlayer.Position;
 
 public class Vehicle {
     public Position position;

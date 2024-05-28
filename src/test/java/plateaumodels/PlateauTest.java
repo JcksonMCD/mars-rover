@@ -1,10 +1,15 @@
-package plateau.models;
+package plateaumodels;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import inputlayer.CompassDirection;
+import inputlayer.PlateauSize;
+import inputlayer.Position;
+import logiclayer.Plateau;
+import logiclayer.vehicle.AvailableVehicles;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import input.layer.*;
-import vehicle.*;
+
 
 public class PlateauTest {
 
@@ -33,6 +38,5 @@ public class PlateauTest {
         Position position = new Position(1, 2, CompassDirection.N);
         plateau.addVehicle(position, AvailableVehicles.ROVER);
         plateau.printPositionOfVehicles();
-        // This test can be enhanced by capturing stdout and verifying the output
     }
 }

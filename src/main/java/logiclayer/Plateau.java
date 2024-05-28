@@ -1,19 +1,22 @@
-package plateau.models;
+package logiclayer;
 
-import input.layer.PlateauSize;
-import input.layer.Position;
-import org.northcoders.fundamentals.JavaPlatform.InstructionOperator;
-import vehicle.AvailableVehicles;
-import vehicle.MoonBuggy;
-import vehicle.Rover;
-import vehicle.Vehicle;
+import inputlayer.PlateauSize;
+import inputlayer.Position;
+import logiclayer.plateaumodels.CrashSite;
+import logiclayer.vehicle.AvailableVehicles;
+import logiclayer.vehicle.MoonBuggy;
+import logiclayer.vehicle.Rover;
+import logiclayer.vehicle.Vehicle;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class Plateau {
+
+    // TWO D ARRAY
     public PlateauSize plateauSize;
+    int[][] plateau;
     List<Vehicle> vehicles = new ArrayList<>();
     List<CrashSite> crashSites = new ArrayList<>();
 
@@ -54,7 +57,7 @@ public class Plateau {
                     break;
                 case FORD_FIESTA:
                     System.out.println("Ford Fiestas can't land on Mars! You crashed... oops :(");
-                    InstructionOperator.fordPicked = true;
+                    MissionControl.fordPicked = true;
                     break;
                 default:
                     throw new IllegalArgumentException("Unknown vehicle type: " + vehicleType);

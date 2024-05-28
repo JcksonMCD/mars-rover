@@ -1,6 +1,6 @@
-package vehicle;
+package logiclayer.vehicle;
 
-import input.layer.Position;
+import inputlayer.Position;
 
 public class Rover extends Vehicle{
     int numberOfPictures;

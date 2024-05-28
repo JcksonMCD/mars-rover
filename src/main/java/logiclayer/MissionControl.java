@@ -1,30 +1,28 @@
-package org.northcoders.fundamentals.JavaPlatform;
+package logiclayer;
 
-import input.layer.InputParser;
-import input.layer.Instructor;
-import input.layer.PlateauSize;
-import input.layer.Position;
-import plateau.models.CrashSite;
-import plateau.models.Plateau;
-import vehicle.AvailableVehicles;
-import vehicle.Vehicle;
+import inputlayer.InputParser;
+import inputlayer.Instructor;
+import inputlayer.PlateauSize;
+import inputlayer.Position;
+import logiclayer.plateaumodels.CrashSite;
+import logiclayer.vehicle.AvailableVehicles;
+import logiclayer.vehicle.Vehicle;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-public class InstructionOperator {
+public class MissionControl {
     private static Plateau plateau;
     static Vehicle currentVehicle;
     private static Scanner scanner;
     public static boolean fordPicked = false;
 
-    public InstructionOperator(Scanner scanner) {
+    public MissionControl(Scanner scanner) {
         this.scanner = scanner;
     }
 
-    public static void runBasicProgrammeStart() {
-        InstructionOperator instructionOperator = new InstructionOperator(new Scanner(System.in));
+    public void runBasicProgrammeStart() {
         plateau = new Plateau(getPlateauSizeFromUser());
         setPlateau(plateau);
 
@@ -55,7 +53,7 @@ public class InstructionOperator {
         getInstructionsFromUser();
     }
 
-    public static boolean movementInBoundsOfPlateau() {
+    public boolean movementInBoundsOfPlateau() {
         Position originalPosition = new Position(currentVehicle.position.getX(), currentVehicle.position.getY(), currentVehicle.position.getFacing());
         currentVehicle.move();
 
@@ -73,7 +71,7 @@ public class InstructionOperator {
         }
     }
 
-    public static void executeInstructions(List<Instructor> instructions) {
+    public void executeInstructions(List<Instructor> instructions) {
         if (currentVehicle == null) {
             throw new IllegalStateException("Current vehicle not set.");
         }
@@ -96,21 +94,21 @@ public class InstructionOperator {
         plateau.printPositionOfVehicles();
     }
 
-    public static void setPlateau(Plateau plateau) {
-        InstructionOperator.plateau = plateau;
+    public void setPlateau(Plateau plateau) {
+        MissionControl.plateau = plateau;
     }
 
-    public static void setCurrentVehicle(int vehicleNumber) {
+    public void setCurrentVehicle(int vehicleNumber) {
         if (!plateau.getVehicles().isEmpty()) {
             currentVehicle = plateau.getVehicles().get(vehicleNumber);
         }
     }
 
-    public static Plateau getPlateau() {
+    public Plateau getPlateau() {
         return plateau;
     }
 
-    public static PlateauSize getPlateauSizeFromUser() {
+    public PlateauSize getPlateauSizeFromUser() {
         InputParser inputParser = new InputParser();
         boolean validPlateauSizeInputted = false;
         PlateauSize plateauSize = new PlateauSize(0, 0);
@@ -120,7 +118,7 @@ public class InstructionOperator {
                 System.out.println("Please input the size of your plateau space in the format (maxX maxY). Where X and Y are positive whole numbers.");
                 plateauSize = inputParser.plateauSizeParser(scanner.nextLine());
                 validPlateauSizeInputted = true;
-                System.out.println("Plateau size set :)");
+                System.out.println("plateau.models.Plateau size set :)");
             } catch (IllegalArgumentException e) {
                 System.out.println("Not a valid size. Read the instructions again.");
             } catch (ArrayIndexOutOfBoundsException e) {
@@ -131,7 +129,7 @@ public class InstructionOperator {
         return plateauSize;
     }
 
-    public static AvailableVehicles getVehicleTypeFromUser() {
+    public AvailableVehicles getVehicleTypeFromUser() {
         boolean validVehicleInputted = false;
         AvailableVehicles vehicleType = null;
 
@@ -148,7 +146,7 @@ public class InstructionOperator {
         return vehicleType;
     }
 
-    public static Position getStartingVehicleSpotFromUser() {
+    public Position getStartingVehicleSpotFromUser() {
         InputParser inputParser = new InputParser();
         boolean validstarterSpotInputted = false;
         Position startPosition = null;
@@ -173,7 +171,7 @@ public class InstructionOperator {
         return startPosition;
     }
 
-    public static void getInstructionsFromUser() {
+    public void getInstructionsFromUser() {
         InputParser inputParser = new InputParser();
         boolean validInstructionsInputted = false;
 
@@ -195,4 +193,3 @@ public class InstructionOperator {
         } while (!validInstructionsInputted);
     }
 }
-

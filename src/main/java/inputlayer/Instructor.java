@@ -1,4 +1,4 @@
-package input.layer;
+package inputlayer;
 
 public enum Instructor {
     L,

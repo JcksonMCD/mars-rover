@@ -1,4 +1,4 @@
-package vehicle;
+package logiclayer.vehicle;
 
 public enum AvailableVehicles {
     ROVER,
